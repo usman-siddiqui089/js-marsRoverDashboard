@@ -53,26 +53,26 @@ function setContent(roverName,htmlData){
 }
 
 function generateHtml(roverObj){
-    return `                                                
+    return `                                               
         <div class="tm-img-gallery-info-container">                                    
             <h2 class="tm-text-title tm-gallery-title"><span class="tm-bold tm-yellow" id="roverName">${roverObj.roverInfo.name}</span></h2>
             <p class="tm-text"><span class="tm-yellow roverInfoTitle">Launch Date:</span><span class="tm-white roverInfoData" id="roverLaunchDate">&nbsp;${roverObj.roverInfo.launch_date}</span></p>
             <p class="tm-text"><span class="tm-yellow roverInfoTitle">Landing Date:</span><span class="tm-white roverInfoData" id="roverLandingDate">&nbsp;${roverObj.roverInfo.landing_date}</span></p>
             <p class="tm-text"><span class="tm-yellow roverInfoTitle">Status:</span><span class="tm-white roverInfoData" id="roverStatus">&nbsp;${roverObj.roverInfo.status}</span></p>
-        </div>      
+        </div>  
         ${generateImageTiles(roverObj.imgSrcArr)}                                                                  
     `
 }
 
 function generateImageTiles(imagesArr){
     let imageGallery = ''
-    for(let i=0; i<imagesArr.length; i++){
+    imagesArr.forEach(element => {
         imageGallery += `
             <div class="grid-item">
-                <img src="${imagesArr[i]}" alt="Image" class="img-fluid tm-img">
+                <img src="${element}" alt="Image" class="img-fluid tm-img">
             </div>
         `
-    }
+    });
     return imageGallery
 }
 
@@ -110,14 +110,32 @@ const getWeatherApiData = () => {
 function retrieveWeatherInfo(state){
     const weatherObj = state.get('weather')
     const sol_key = weatherObj.get('sol_keys').get(0)
-    const temperature = weatherObj.get(sol_key).get('AT').get('av')
-    const windSpeed = weatherObj.get(sol_key).get('HWS').get('av')
-    generateWeatherHtml(temperature,windSpeed)
+    const temperature = () => {
+        try {
+            weatherObj.get(sol_key).get('AT').get('av')
+        } catch (error) {
+            return false
+        }
+    }
+    const windSpeed = () => {
+        try {
+            weatherObj.get(sol_key).get('HWS').get('av')
+        } catch (error) {
+            return false
+        }
+    }
+    generateWeatherHtml(temperature(),windSpeed())
 }
 
 function generateWeatherHtml(temp,ws){
-    windSpan.innerHTML = `<span>${ws} m/s</span>`
-    tempSpan.innerHTML = `<span>${temp}&deg; F</span>`
+    if(temp == false || ws == false){
+        windSpan.innerHTML = `<span>Wind Speed</span>`
+        tempSpan.innerHTML = `<span>Temperature</span>`
+    }
+    else{
+        windSpan.innerHTML = `<span>${ws} m/s</span>`
+        tempSpan.innerHTML = `<span>${temp}&deg; F</span>`
+    }
 }
 
 // Preloader Animations Here

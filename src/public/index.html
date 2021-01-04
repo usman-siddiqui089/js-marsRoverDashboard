@@ -62,15 +62,6 @@
                     <li class="selected">
                         <div class="cd-full-width">
                             <div class="container-fluid js-tm-page-content tm-page-pad" data-page-no="1">
-                                <!-- <div class="row">
-                                    <div class="tm-3-col-container">
-                                        <div class="tm-weather-container">
-                                            <div class="text-xs-left tm-textbox tm-textbox-padding tm-bg-white-translucent">
-                                                <h2 class="tm-text-title"><span class="weather-text">Weather</span><i class="fas fa-cloud-sun weather-icon"></i></h2>                                           
-                                            </div>
-                                        </div>
-                                    </div> 
-                                </div> -->
                                 <div class="row">
                                         <div class="tm-3-col-container">                                        
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 tm-3-col-textbox">
@@ -96,11 +87,11 @@
                             </div>
                         </div>
                     </li>
-                    <li>                    
+                    <li>                
                         <div class="cd-full-width">
                             <div class="container-fluid js-tm-page-content" data-page-no="2" data-page-type="gallery">
                                 <div class="tm-img-gallery-container">
-                                    <div class="tm-img-gallery gallery-three" id="curiosity-content"></div>                                 
+                                    <div class="tm-img-gallery gallery-three extra-height" id="curiosity-content"></div>                                 
                                 </div>
                             </div>                      
                         </div>
@@ -110,7 +101,8 @@
                         <div class="cd-full-width">
                             <div class="container-fluid js-tm-page-content" data-page-no="3" data-page-type="gallery">
                                 <div class="tm-img-gallery-container tm-img-gallery-container-2">
-                                    <div class="tm-img-gallery gallery-three" id="opportunity-content"></div>                                 
+                                    <div class="tm-img-gallery gallery-three" id="opportunity-content">
+                                    </div>                                 
                                 </div>
                             </div>                      
                         </div>
@@ -159,7 +151,6 @@
         // Get the page height
         var totalPageHeight = 15 + $('.cd-slider-nav').height()
                                 + pageContentHeight + offset
-                                + $('.tm-footer').height();
 
         // Adjust layout based on page height and window height
         if(totalPageHeight > $(window).height()) 
