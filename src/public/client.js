@@ -1,94 +1,158 @@
-let store = {
-    user: { name: "Student" },
-    apod: '',
-    rovers: ['Curiosity', 'Opportunity', 'Spirit'],
-}
+let store = Immutable.Map({
+    roverImages: ''
+})
 
 // add our markup to the page
-const root = document.getElementById('root')
-var textWrapper = document.getElementById('welcome-text')
-const home_content = document.getElementById('home-content')
+const textWrapper = document.getElementById('welcome-text')
+const homeContent = document.getElementById('home-content')
+const windSpan = document.getElementById('wind-speed')
+const tempSpan = document.getElementById('temperature')
+const curiosityContent = document.getElementById('curiosity-content')
+const opportunityContent = document.getElementById('opportunity-content')
+const spiritContent = document.getElementById('spirit-content')
 
-const updateStore = (store, newState) => {
-    store = Object.assign(store, newState)
-    render(root, store)
+// call for every rover click
+function roverClick(rover) {
+    const roverID = rover.id
+    getRoverImagesApiData(roverID)
 }
 
-const render = async (root, state) => {
-    // root.innerHTML = App(state)
-    return App(state)
+// Retrieve weather info and display
+const getRoverImagesApiData = (rover) => {
+    fetch(`http://localhost:3000/${rover}`)
+    .then(res => res.json())
+    .then(data => {
+        const newState = updateStore(data)
+        retrieveImagesAndData(newState)
+    })
 }
 
+function retrieveImagesAndData(state){
+    const latestPhotosArr = Array.from(state.get('roverImages').get('latest_photos'))
+    const imgSrcArr = Array.from(Immutable.Seq(latestPhotosArr).map(rover => rover.toObject().img_src))
+    const roverInfo = latestPhotosArr[0].toObject().rover.toObject()
+    const final_data = {
+        imgSrcArr,
+        roverInfo
+    }
+    setContent(final_data.roverInfo.name, generateHtml(final_data))
+}
 
-// create content
-const App = (state) => {
-    let { rovers, apod } = state
-    home_content.style.display = 'block';
+// Set content here
+function setContent(roverName,htmlData){
+    switch(roverName) {
+        case 'Curiosity':
+            curiosityContent.innerHTML = htmlData
+            break;
+        case 'Opportunity':
+            opportunityContent.innerHTML = htmlData
+            break;
+        case 'Spirit':
+            spiritContent.innerHTML = htmlData
+            break;
+        default:
+            return false;
+    }
+}
+
+//higher-order function
+function generateHtml(roverObj){
+    return `                                               
+        <div class="tm-img-gallery-info-container">                                    
+            <h2 class="tm-text-title tm-gallery-title"><span class="tm-bold tm-yellow" id="roverName">${roverObj.roverInfo.name}</span></h2>
+            <p class="tm-text"><span class="tm-yellow roverInfoTitle">Launch Date:</span><span class="tm-white roverInfoData" id="roverLaunchDate">&nbsp;${roverObj.roverInfo.launch_date}</span></p>
+            <p class="tm-text"><span class="tm-yellow roverInfoTitle">Landing Date:</span><span class="tm-white roverInfoData" id="roverLandingDate">&nbsp;${roverObj.roverInfo.landing_date}</span></p>
+            <p class="tm-text"><span class="tm-yellow roverInfoTitle">Status:</span><span class="tm-white roverInfoData" id="roverStatus">&nbsp;${roverObj.roverInfo.status.toUpperCase()}</span></p>
+        </div>  
+        ${generateImageTiles(roverObj.imgSrcArr)}                                                                  
+    `
+}
+
+//pure function
+function generateImageTiles(imagesArr){
+    let imageGallery = ''
+    imagesArr.forEach(element => {
+        imageGallery += `
+            <div class="grid-item">
+                <img src="${element}" alt="Image" class="img-fluid tm-img">
+            </div>
+        `
+    });
+    return imageGallery
+}
+
+const updateStore = (newState) => {
+    const newStore = store.merge(store,newState)
+    return newStore
+}
+
+const render = async () => {
+    return App()
+}
+
+const App = () => {
+    homeContent.style.display = 'block';
 }
 
 // listening for load event because page should load before any JS is called
 window.addEventListener('load', () => {
     setTimeout(function(){
-        render(root, store)
+        render(store)
+        getWeatherApiData()
     },3500)
 })
 
-// ------------------------------------------------------  COMPONENTS
+// Retrieve Weather Api Data and Display
+const getWeatherApiData = () => {
+    fetch(`http://localhost:3000/weather`)
+    .then(res => res.json())
+    .then(data => {
+        const weatherState = updateStore(data)
+        retrieveWeatherInfo(weatherState)
+    })
+}
 
-// Pure function that renders conditional information -- THIS IS JUST AN EXAMPLE, you can delete it.
-// const Greeting = (name) => {
-//     if (name) {
-//         return `
-//             <h1>Welcome, ${name}!</h1>
-//         `
-//     }
-
-//     return `
-//         <h1>Hello!</h1>
-//     `
-// }
-
-// Example of a pure function that renders infomation requested from the backend
-const ImageOfTheDay = (apod) => {
-
-    // If image does not already exist, or it is not from today -- request it again
-    const today = new Date()
-    const photodate = new Date(apod.date)
-    console.log(photodate.getDate(), today.getDate());
-
-    console.log(photodate.getDate() === today.getDate());
-    if (!apod || apod.date === today.getDate() ) {
-        getImageOfTheDay(store)
+//pure function
+function retrieveWeatherInfo(state){
+    const weatherObj = state.get('weather')
+    const sol_key = weatherObj.get('sol_keys').get(0)
+    const temperature = () => {
+        try {
+            weatherObj.get(sol_key).get('AT').get('av')
+        } catch (error) {
+            return false
+        }
     }
-
-    // check if the photo of the day is actually type video!
-    if (apod.media_type === "video") {
-        return (`
-            <p>See today's featured video <a href="${apod.url}">here</a></p>
-            <p>${apod.title}</p>
-            <p>${apod.explanation}</p>
-        `)
-    } else {
-        return (`
-            <img src="${apod.image.url}" height="350px" width="100%" />
-            <p>${apod.image.explanation}</p>
-        `)
+    const windSpeed = () => {
+        try {
+            weatherObj.get(sol_key).get('HWS').get('av')
+        } catch (error) {
+            return false
+        }
+    }
+    const pressure = parseInt(weatherObj.get(sol_key).get('PRE').get('av'))
+    const season = weatherObj.get(sol_key).get('Season').toUpperCase()
+    if (temperature() == false || windSpeed() == false){
+        generateWeatherHtml(pressure,season,false)
+    }
+    else{
+        generateWeatherHtml(temperature(),windSpeed(),true)
     }
 }
 
-// ------------------------------------------------------  API CALLS
-
-// Example API call
-const getImageOfTheDay = (state) => {
-    let { apod } = state
-
-    fetch(`http://localhost:3000/apod`)
-        .then(res => res.json())
-        .then(apod => updateStore(store, { apod }))
-
-    return { apod }
+//higher-order function
+function generateWeatherHtml(val1,val2,flag){
+    if(flag == false){
+        windSpan.innerHTML = `<span>Season: ${val2}</span>`
+        tempSpan.innerHTML = `<span>Pressure: ${val1} Pa</span>`
+    }
+    else{
+        windSpan.innerHTML = `<span>Wind: ${val2} m/s</span>`
+        tempSpan.innerHTML = `<span>Air Temp: ${val1}&deg; F</span>`
+    }
 }
 
+// Preloader Animations Here
 textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
 anime.timeline({loop: false})
   .add({

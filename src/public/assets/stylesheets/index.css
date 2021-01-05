@@ -8,6 +8,7 @@ body {
 }
 
 .tm-white { color: #FFFFFF; }
+.tm-yellow { color: #E3B104;}
 
 ul { padding: 0; margin: 0; }
 figure { margin: 0; }
@@ -129,10 +130,14 @@ button:focus { outline: none; }
 	list-style: none; 
 }
 
-.cd-hero-slider li:nth-of-type(1) { background-image: url(../images/space-bg.jpg); }
-.cd-hero-slider li:nth-of-type(2) { background-image: url(../images/space-bg.jpg); }
-.cd-hero-slider li:nth-of-type(3) { background-image: url(../images/space-bg.jpg); }
-.cd-hero-slider li:nth-of-type(4) { background-image: url(../images/space-bg.jpg); }
+.extra-height {
+	height: 1080.5rem;
+}
+
+.cd-hero-slider li:nth-of-type(1) { background-image: url(../images/space-bg.jpg);}
+.cd-hero-slider li:nth-of-type(2) { background-color: #19181C;}
+.cd-hero-slider li:nth-of-type(3) { background-color: #19181C;}
+.cd-hero-slider li:nth-of-type(4) { background-color: #19181C;}
 
 .tm-bg-white-translucent { background-color: rgba(255,255,255,0.8); }
 .tm-bg-white-translucent p { color: black; }
@@ -167,20 +172,6 @@ button:focus { outline: none; }
 	margin-top: 5rem;
 }
 
-/* footer */
-.tm-social-link {
-	background-color: rgba(255,255,255,0.40);
-    color: black;
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    text-align: center;
-    padding-top: 5px;
-    margin-right: 10px;
-}
-
-.tm-social-link:last-child { margin-right: 0; }
-
 .tm-footer {
 	position: absolute;
 	bottom: 0;
@@ -193,8 +184,6 @@ button:focus { outline: none; }
     z-index: 1001;
     padding: 0 11px 12px;
 }
-
-.tm-social-icons-container { margin-bottom: 30px; }
 
 .cd-full-width {
 	display: -ms-flexbox;
@@ -209,101 +198,10 @@ button:focus { outline: none; }
 
 .cd-hero-slider p:last-child { margin-bottom: 0; }
 
-/* Contact */
-.tm-contact-page {
-	margin: 0 auto;
-	max-width: 1190px;
-	padding: 0;
-}
-
-.tm-contact-container { max-width: 1150px; }
-
-.form-control,
-.tm-submit-btn {
-	font-size: 1.8rem;
-}
-.form-control {
-	background-color: rgba(255,255,255,0.7);
-	border-radius: 0;
-	padding: 1rem 2rem;
-}
-
-.form-control::-webkit-input-placeholder { color: #000000; }
-.form-control:-moz-placeholder { color: #000000; } /* Firefox 18- */
-.form-control::-moz-placeholder { color: #000000; } /* Firefox 19+ */
-.form-control:-ms-input-placeholder { color: #000000; }
-
-.form-group { margin-bottom: 1.5rem; }
-
-.tm-submit-btn {
-	background-color: #0066CC;
-	border: none;
-	color: white;
-	padding: 10px 50px;
-	margin-top: 10px;
-	font-weight: 400;
-	font-size: 2.5rem;
-}
-
-.tm-submit-btn:hover,
-.tm-submit-btn:focus {
-	background-color: #2277EE;
-}
-
-textarea { height: 168px; }
-
-/* Preloader 
-	https://ihatetomatoes.net/create-custom-preloading-screen/
-*/
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
-   #loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; }
-   #loader { display: block; position: relative; left: 50%; top: 50%; width: 150px; height: 150px; margin: -75px 0 0 -75px; border-radius: 50%; border: 3px solid transparent; border-top-color: #3498db; /* Chrome, Opera 15+, Safari 5+ */
-   	animation: spin 2s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */ z-index: 2001; }
-   #loader:before { content: ""; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; border-radius: 50%; border: 3px solid transparent;
-   	border-top-color: #e74c3c; /* Chrome, Opera 15+, Safari 5+ */
-   animation: spin 3s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */ }
-   #loader:after { content: ""; position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px; border-radius: 50%; border: 3px solid transparent;
-border-top-color: #f9c922; /* Chrome, Opera 15+, Safari 5+ */ animation: spin 1.5s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */ }
-@keyframes spin {
-	0%   {  /* Chrome, Opera 15+, Safari 3.1+ */  /* IE 9 */
-		transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
-	}
-	100% {  /* Chrome, Opera 15+, Safari 3.1+ */  /* IE 9 */
-		transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
-	}
-}
-
-#loader-wrapper .loader-section { position: fixed; top: 0; width: 51%; height: 100%; background: #222222; z-index: 2000;  /* Chrome, Opera 15+, Safari 3.1+ */  /* IE 9 */ transform: translateX(0);  /* Firefox 16+, IE 10+, Opera */}
-
-#loader-wrapper .loader-section.section-left { left: 0; }
-
-#loader-wrapper .loader-section.section-right { right: 0; }
-
 /* Loaded */
-.loaded #loader-wrapper .loader-section.section-left {  /* Chrome, Opera 15+, Safari 3.1+ */  /* IE 9 */
-	transform: translateX(-100%);  /* Firefox 16+, IE 10+, Opera */  
-	transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
-}
 
-.loaded #loader-wrapper .loader-section.section-right {  /* Chrome, Opera 15+, Safari 3.1+ */  /* IE 9 */
-	transform: translateX(100%);  /* Firefox 16+, IE 10+, Opera */  
-	transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
-}
-
-.loaded #loader {
-	opacity: 0;  
-	transition: all 0.3s ease-out;
-}
-.loaded #loader-wrapper {
-	visibility: hidden;  /* Chrome, Opera 15+, Safari 3.1+ */  /* IE 9 */
-	transform: translateY(-100%);  /* Firefox 16+, IE 10+, Opera */  
-	transition: all 0.3s 1s ease-out;
-}
-
-/* JavaScript Turned Off */
 .no-js #loader-wrapper { display: none; }
+
 /*============ Preloader ends ==================================*/
 
 .cd-hero-slider.small-screen { height: 100%; }
@@ -335,7 +233,6 @@ border-top-color: #f9c922; /* Chrome, Opera 15+, Safari 5+ */ animation: spin 1.
 	margin-bottom: 30px; 
 	-ms-flex: 0 1 auto; 
 	    flex: 0 1 auto; 
-	        /* Fix flexbox in IE 10 bug https://philipwalton.com/articles/normalizing-cross-browser-flexbox-bugs/ */
 }
 
 .tm-2-col-textbox-2:last-child { margin-bottom: 0; }
@@ -518,6 +415,7 @@ figure.effect-ruby:hover img {
 .tm-white-box-margin-b { margin-bottom: 30px; }
 .gallery-one .grid-item { max-width: 340px; }
 .gallery-two .grid-item { max-width: 453px; }
+.gallery-three .grid-item {max-width: 340px;}
 .tm-img-gallery-container-2 { max-width: 453px; }
 .tm-gallery-title span { width: 100%; }
 
@@ -569,6 +467,7 @@ figure.effect-ruby:hover img {
 	.tm-img-gallery-info-container {
 		padding: 0 11px 30px;
 		max-width: 700px;
+		min-width: 700px;
 		margin: 0 auto 0 0;
 	}
 
@@ -773,8 +672,46 @@ figure.effect-ruby:hover img {
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
 	.tm-2-col-textbox-2 { margin-right: 15px; }
+	.weather-text {
+		font-size: 100%;
+		color: #000002;
+		vertical-align: middle;
+	}
 }
 
 .home-content{
 	display: none;
+}
+
+.tm-weather-container {
+	width: 100%;
+	height: auto;
+	margin-top: 5rem;
+	margin-bottom: 3rem;
+	padding: 0 1.4rem;
+}
+
+.weather-text {
+	font-size: 130%;
+	color: #000002;
+	margin-left: 5rem;
+}
+
+.weather-icon {
+	font-size: 130%;
+	color: #000002;
+	margin-left: 2rem;
+}
+
+.roverInfoTitle {
+	font-weight: bold;
+	font-size: x-large;
+}
+
+.tm-bold {
+	font-weight: bold;
+}
+
+.roverInfoData {
+	font-size: x-large;
 }
