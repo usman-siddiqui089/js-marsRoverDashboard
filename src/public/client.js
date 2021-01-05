@@ -11,11 +11,13 @@ const curiosityContent = document.getElementById('curiosity-content')
 const opportunityContent = document.getElementById('opportunity-content')
 const spiritContent = document.getElementById('spirit-content')
 
+// call for every rover click
 function roverClick(rover) {
     const roverID = rover.id
     getRoverImagesApiData(roverID)
 }
 
+// Retrieve weather info and display
 const getRoverImagesApiData = (rover) => {
     fetch(`http://localhost:3000/${rover}`)
     .then(res => res.json())
@@ -36,6 +38,7 @@ function retrieveImagesAndData(state){
     setContent(final_data.roverInfo.name, generateHtml(final_data))
 }
 
+// Set content here
 function setContent(roverName,htmlData){
     switch(roverName) {
         case 'Curiosity':
@@ -52,18 +55,20 @@ function setContent(roverName,htmlData){
     }
 }
 
+//higher-order function
 function generateHtml(roverObj){
     return `                                               
         <div class="tm-img-gallery-info-container">                                    
             <h2 class="tm-text-title tm-gallery-title"><span class="tm-bold tm-yellow" id="roverName">${roverObj.roverInfo.name}</span></h2>
             <p class="tm-text"><span class="tm-yellow roverInfoTitle">Launch Date:</span><span class="tm-white roverInfoData" id="roverLaunchDate">&nbsp;${roverObj.roverInfo.launch_date}</span></p>
             <p class="tm-text"><span class="tm-yellow roverInfoTitle">Landing Date:</span><span class="tm-white roverInfoData" id="roverLandingDate">&nbsp;${roverObj.roverInfo.landing_date}</span></p>
-            <p class="tm-text"><span class="tm-yellow roverInfoTitle">Status:</span><span class="tm-white roverInfoData" id="roverStatus">&nbsp;${roverObj.roverInfo.status}</span></p>
+            <p class="tm-text"><span class="tm-yellow roverInfoTitle">Status:</span><span class="tm-white roverInfoData" id="roverStatus">&nbsp;${roverObj.roverInfo.status.toUpperCase()}</span></p>
         </div>  
         ${generateImageTiles(roverObj.imgSrcArr)}                                                                  
     `
 }
 
+//pure function
 function generateImageTiles(imagesArr){
     let imageGallery = ''
     imagesArr.forEach(element => {
@@ -107,6 +112,7 @@ const getWeatherApiData = () => {
     })
 }
 
+//pure function
 function retrieveWeatherInfo(state){
     const weatherObj = state.get('weather')
     const sol_key = weatherObj.get('sol_keys').get(0)
@@ -124,17 +130,25 @@ function retrieveWeatherInfo(state){
             return false
         }
     }
-    generateWeatherHtml(temperature(),windSpeed())
-}
-
-function generateWeatherHtml(temp,ws){
-    if(temp == false || ws == false){
-        windSpan.innerHTML = `<span>Wind Speed</span>`
-        tempSpan.innerHTML = `<span>Temperature</span>`
+    const pressure = parseInt(weatherObj.get(sol_key).get('PRE').get('av'))
+    const season = weatherObj.get(sol_key).get('Season').toUpperCase()
+    if (temperature() == false || windSpeed() == false){
+        generateWeatherHtml(pressure,season,false)
     }
     else{
-        windSpan.innerHTML = `<span>${ws} m/s</span>`
-        tempSpan.innerHTML = `<span>${temp}&deg; F</span>`
+        generateWeatherHtml(temperature(),windSpeed(),true)
+    }
+}
+
+//higher-order function
+function generateWeatherHtml(val1,val2,flag){
+    if(flag == false){
+        windSpan.innerHTML = `<span>Season: ${val2}</span>`
+        tempSpan.innerHTML = `<span>Pressure: ${val1} Pa</span>`
+    }
+    else{
+        windSpan.innerHTML = `<span>Wind: ${val2} m/s</span>`
+        tempSpan.innerHTML = `<span>Air Temp: ${val1}&deg; F</span>`
     }
 }
 
